@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, Text, View, ActivityIndicator } from 'react-native'
+import { Pressable, StyleSheet, Text, View, ActivityIndicator, Image } from 'react-native'
 import React from 'react'
 // import { categories } from '../data/categories'
 import { colors } from '../theme/colors'
@@ -9,25 +9,24 @@ import { useGetCategoriesQuery } from '../services/ecApi'
 const Categories = ({ navigation }) => {
   //Llamo con el useSelector el state guardado en el homeSlice
   // const categories = useSelector(state => state.homeSlice.allCategories)
-
+  // const isLoading = false
   //Llamamos a las categorias en Firebase con el Hook que creamos
   const { data, isLoading } = useGetCategoriesQuery()
   const categories = data;
   return (
-    <View>
+    <View style={styles.viewContainer}>
       {isLoading ? <ActivityIndicator size="large" color="#0000ff" />
         : <FlatList
           style={styles.categoriesContainer}
           data={categories}
           renderItem={({ item }) =>
-            <Pressable onPress={() => navigation.navigate('products', { item: item })}>
+            <Pressable onPress={() => navigation.navigate('products', { item })}>
               <Text style={styles.itemContainer}>{item}</Text>
             </Pressable>
           }
           keyExtractor={key => key}
         />
       }
-
     </View>
   )
 }
@@ -35,9 +34,11 @@ const Categories = ({ navigation }) => {
 export default Categories
 
 const styles = StyleSheet.create({
-  categoriesContainer: {
+  viewContainer: {
     backgroundColor: colors.third,
-    paddingTop: 5
+  },
+  categoriesContainer: {
+    paddingTop: 5,
   },
   itemContainer: {
     backgroundColor: colors.primary,

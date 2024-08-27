@@ -10,10 +10,16 @@ export const ecApi = createApi({
         getCategories: builder.query({
             query: () => 'categories.json',
         }),
-        //Acceder a la DB de firebase para get la imagen
+        getProducts: builder.query({
+            query: () => 'products.json',
+        }),
+
+        //Acceder a la DB de firebase para llamar la imagen
         getImage: builder.query({
             query: () => 'image.json',
         }),
+
+        //Guardar imagen en Db de firebase
         putImage: builder.mutation({
             query: (image) => ({
                 url: 'image.json',
@@ -24,4 +30,4 @@ export const ecApi = createApi({
     })
 })
 
-export const { useGetCategoriesQuery, useGetImageQuery, usePutImageMutation } = ecApi
+export const { useGetCategoriesQuery, useGetProductsQuery, useGetImageQuery, usePutImageMutation } = ecApi

@@ -1,15 +1,21 @@
-import { Image, Pressable, SafeAreaView, StyleSheet, Text, View } from 'react-native'
+import { Image, Pressable, SafeAreaView, StyleSheet, Text, View, Alert, Button } from 'react-native'
 import React, { useState } from 'react'
 import Header from '../components/Header'
 import Entypo from '@expo/vector-icons/Entypo';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import * as ImagePicker from 'expo-image-picker'
 import * as Location from 'expo-location';
 import { ActivityIndicator } from 'react-native';
 import { usePutImageMutation } from '../services/ecApi';
 import { useGetImageQuery } from '../services/ecApi';
+import { colors } from '../theme/colors';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useDispatch } from 'react-redux';
+import { clearUser } from '../redux/slices/authSlice';
 
 const Profile = ({ navigation }) => {
+    const dispatch = useDispatch()
     // const [image, setImage] = useState()
     const defaultImage = 'https://i.pinimg.com/736x/0d/64/98/0d64989794b1a4c9d89bff571d3d5842.jpg';
     //Ingresar imagen en DB de firebase
@@ -19,7 +25,6 @@ const Profile = ({ navigation }) => {
     //Traer locación
     const [location, setLocation] = useState(null)
     const [errorMsg, setErrorMsg] = useState(null)
-
     //Tomar imagen de galeria
     const pickImage = async () => {
         // No permissions request is necessary for launching the image library
@@ -39,7 +44,6 @@ const Profile = ({ navigation }) => {
             refetch()
         }
     };
-
     //Camera Permissions
     const cameraImage = async () => {
         let cameraResult = await ImagePicker.requestCameraPermissionsAsync()
@@ -60,7 +64,7 @@ const Profile = ({ navigation }) => {
             refetch()
         }
     }
-
+    //Mapa Locacion
     const mapLoc = async () => {
         let { status } = await Location.requestForegroundPermissionsAsync();
 
@@ -73,11 +77,31 @@ const Profile = ({ navigation }) => {
         setLocation(location);
         navigation.navigate('mapLocation', { location })
     }
-
+    //LogOut
+    const logOut = async () => {
+        try {
+            await AsyncStorage.removeItem('userEmail');
+            await AsyncStorage.removeItem('userPassword');
+            dispatch(clearUser())
+            // navigation.navigate('login')
+        }
+        catch (error) {
+            console.log(error);
+        }
+    }
+    //Alert Logout
+    const alertLogOut = () => {
+        Alert.alert('Logout', '¿Really you want to logout?', [
+            { text: 'Cancel'},
+            { text: 'Si', onPress: ()=> logOut()},
+        ]);
+    }
 
     return (
         <SafeAreaView>
-            <Header title={'My Profile'} />
+            <View style={styles.headerContainer}>
+                <Header title={'My Profile'} />
+            </View>
             <View style={styles.imageContainer}>
                 {/* {data ? <Image style={styles.profileImage} source={{ uri: data.image }} /> : <Image style={styles.profileImage} source={{ uri: defaultImage }} />} */}
                 {isLoading ? <ActivityIndicator size="large" color="#0000ff" />
@@ -97,6 +121,10 @@ const Profile = ({ navigation }) => {
                 <Entypo name="map" size={40} color="black" />
                 <Text>Open Map</Text>
             </Pressable>
+            <Pressable style={styles.btnContainer} onPress={alertLogOut}>
+                <MaterialIcons name="logout" size={40} color="black" />
+                <Text>Logout</Text>
+            </Pressable>
         </SafeAreaView>
     )
 }
@@ -104,6 +132,11 @@ const Profile = ({ navigation }) => {
 export default Profile
 
 const styles = StyleSheet.create({
+    headerContainer: {
+        backgroundColor: colors.secondary,
+        paddingTop: 20,
+        paddingBottom: 20,
+    },
     imageContainer: {
         marginTop: 20,
         alignItems: 'center'

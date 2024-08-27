@@ -8,8 +8,12 @@ import { Provider } from 'react-redux';
 import Login from './src/screens/Login';
 import Register from './src/screens/Register';
 import MainNav from './src/navigation/MainNav';
+import SplashScreen from './src/screens/SplashScreen';
+import { useEffect, useState } from 'react';
+
 
 export default function App() {
+  const [showSplash, setShowSplash] = useState(true)
   const [fontLoaded] = useFonts({
     Poppins: require('./assets/fonts/Poppins-MediumItalic.ttf'),
     PoppinsBold: require('./assets/fonts/Poppins-Bold.ttf'),
@@ -17,14 +21,19 @@ export default function App() {
   if (!fontLoaded) {
     return;
   }
+  setTimeout(() => {
+    setShowSplash(false)
+  }, 2000)
+  
   return (
     // <Login/>
     // <Register/>
     <Provider store={store}>
       {/* <NavigationContainer> */}
-        {/* <TabNav /> */}
-        <MainNav/>
-        <StatusBar style="auto" />
+      {/* <TabNav /> */}
+      {showSplash ? <SplashScreen /> : <MainNav />}
+      {/* <MainNav/> */}
+      <StatusBar style="auto" />
       {/* </NavigationContainer> */}
     </Provider>
   );

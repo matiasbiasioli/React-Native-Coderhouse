@@ -1,33 +1,42 @@
 import { Image, Pressable, SafeAreaView, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import { products } from '../data/products'
 import Header from '../components/Header'
 import { colors } from '../theme/colors'
 import { useSelector } from 'react-redux'
+import Ionicons from '@expo/vector-icons/Ionicons';
+import { useDispatch } from 'react-redux'
+import { setItemToCart } from '../redux/slices/cartSlice'
 
 const ProductDetail = ({ navigation, route }) => {
     // const { item } = route.params
+    const user = useSelector(state => state.authSlice.user)
     const item = useSelector(state => state.homeSlice.itemSelected)
+
+    const dispatch = useDispatch()
+
+    const handleCart = ()=>{
+        navigation.navigate('cart')
+    }
 
     return (
         <SafeAreaView>
             <View style={styles.headerContainer}>
-                <Header title={item.title} />
                 <Pressable onPress={() => navigation.goBack()}>
-                    <Text>Ir Atrás</Text>
+                    <Ionicons name="arrow-back-circle" size={30} color="white" />
                 </Pressable>
+                <Header title={item.category} />
             </View>
             <View style={styles.productDetailContainer}>
                 <View style={styles.imageContainer}>
-                    <Image style={styles.imageSize} source={{ uri: 'https://reactnative.dev/img/tiny_logo.png' }} />
+                    <Image style={styles.imageSize} source={{ uri: item.images }} />
                 </View>
                 <View style={styles.detailsContainer}>
                     <Text style={styles.productTitle}>{item.title} </Text>
-                    <Text style={styles.productText}>Hemisferio: {item.category} </Text>
+                    <Text style={styles.productText}>Categorie: {item.category} </Text>
                     <Text style={styles.productText}>Description: {item.description} </Text>
                     <Text style={styles.productText}>Price: ${item.price} </Text>
                 </View>
-                <Pressable style={styles.buttonContainer} onPress={console.log('funciona')}>
+                <Pressable style={styles.buttonContainer} onPress={handleCart}>
                     <Text style={styles.buttonText}>Add to cart</Text>
                 </Pressable>
             </View>
@@ -38,6 +47,15 @@ const ProductDetail = ({ navigation, route }) => {
 export default ProductDetail
 
 const styles = StyleSheet.create({
+    headerContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: colors.secondary,
+        paddingTop: 40,
+        paddingBottom: 20,
+        gap: 10
+    },
     productDetailContainer: {
         alignItems: 'center'
     },
@@ -46,8 +64,8 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     imageSize: {
-        width: 150,
-        height: 150,
+        width: 350,
+        height: 350,
     },
     detailsContainer: {
         justifyContent: 'center',
@@ -73,5 +91,6 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         color: colors.fourth,
         fontSize: 20,
-    }
+    },
+
 })

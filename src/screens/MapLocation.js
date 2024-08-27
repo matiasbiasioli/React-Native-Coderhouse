@@ -1,6 +1,8 @@
 import { View, Text, useState, StyleSheet, Pressable } from 'react-native'
 import React from 'react'
 import Header from '../components/Header'
+import Ionicons from '@expo/vector-icons/Ionicons';
+import { colors } from '../theme/colors';
 // import MapView from 'react-native-maps'
 
 
@@ -11,10 +13,13 @@ const MapLocation = ({ route, navigation }) => {
 
     return (
         <View>
-            <Header title='Map' />
-            <Pressable onPress={() => navigation.goBack()}>
-                <Text>Ir Atrás</Text>
-            </Pressable>
+            <View style={styles.mapContainer}>
+                <Pressable onPress={() => navigation.goBack()}>
+                    <Ionicons name="arrow-back-circle" size={30} color="white" />
+                </Pressable>
+                <Header title='Map' />
+            </View>
+
             {/* <View>
                 <MapView
                     style={styles.map}
@@ -28,6 +33,15 @@ const MapLocation = ({ route, navigation }) => {
 }
 
 const styles = StyleSheet.create({
+    mapContainer: {
+        backgroundColor: colors.secondary,
+        paddingTop: 40,
+        paddingBottom: 20,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: 10
+    },
     container: {
         flex: 1,
     },

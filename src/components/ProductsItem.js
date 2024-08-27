@@ -1,4 +1,4 @@
-import { Image, Pressable, StyleSheet, Text, View } from 'react-native'
+import { Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { colors } from '../theme/colors'
 import { useDispatch, useSelector } from 'react-redux'
@@ -6,15 +6,19 @@ import { setItemSelected } from '../redux/slices/homeSlice'
 
 const ProductsItem = ({ item, navigation }) => {
   const dispatch = useDispatch()
-  const handleItemSelected = ()=>{
-   dispatch(setItemSelected(item))
-   navigation.navigate('productDetail')
- }
+  const handleItemSelected = () => {
+    dispatch(setItemSelected(item))
+    navigation.navigate('productDetail')
+  }
   return (
-      <Pressable style={styles.itemContainer} onPress={()=> handleItemSelected() }>
+    <Pressable style={styles.itemContainer} onPress={() => handleItemSelected()}>
+      <View style={styles.itemTextContainer}>
         <Text style={styles.itemText}>{item.title}</Text>
-        <Image style={styles.imageSize} source={{ uri: 'https://reactnative.dev/img/tiny_logo.png' }} />
-      </Pressable>
+      </View>
+      <View>
+        <Image style={styles.imageSize} source={{ uri: item.images }} />
+      </View>
+    </Pressable>
   )
 }
 
@@ -33,11 +37,14 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center'
   },
+  itemTextContainer: {
+    flex: 1
+  },
   itemText: {
     fontSize: 30
   },
   imageSize: {
-    width: 70,
-    height: 70
+    width: 100,
+    height: 100
   }
 })

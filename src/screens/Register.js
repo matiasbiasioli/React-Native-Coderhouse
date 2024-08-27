@@ -1,7 +1,9 @@
-import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native'
+import { Pressable, StyleSheet, Text, TextInput, View, Image } from 'react-native'
 import React, { useState } from 'react'
 import { sdk_auth } from '../firabase/sdk_auth'
 import { createUserWithEmailAndPassword } from 'firebase/auth'
+import logo from '../../assets/img/sony-logo.png'
+
 
 
 const Register = ({ navigation }) => {
@@ -9,6 +11,7 @@ const Register = ({ navigation }) => {
     const [errorPassword, setErrorPassword] = useState(null)
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+
     const onHandleRegister = async () => {
         try {
             const response = await createUserWithEmailAndPassword(sdk_auth, email, password);
@@ -30,6 +33,7 @@ const Register = ({ navigation }) => {
     };
     return (
         <View style={styles.loginContainer}>
+            <Image style={styles.image} source={logo} />
             <Text style={styles.loginText}>Register</Text>
             <TextInput
                 style={styles.loginInput}
@@ -55,10 +59,10 @@ const Register = ({ navigation }) => {
                 <Text style={styles.errorMessage}>{errorPassword}</Text>
             }
             <Pressable style={styles.registerButton} onPress={() => onHandleRegister()}>
-                <Text>Register</Text>
+                <Text style={styles.registerButtonText}>Register</Text>
             </Pressable>
             <Pressable onPress={() => navigation.navigate('login')}>
-                <Text>¿Do you have an user? Login</Text>
+                <Text style={styles.loginTextAsk}>¿Do you have an user? Login</Text>
             </Pressable>
         </View>
     )
@@ -71,6 +75,11 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center'
+    },
+    image: {
+        width: 150,
+        height: 120,
+        marginBottom: 20
     },
     loginText: {
         fontSize: 25,
@@ -92,6 +101,13 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: 'pink',
         marginBottom: 5,
+    },
+    registerButtonText: {
+        fontSize: 15
+    },
+    loginTextAsk: {
+        fontSize: 20,
+        textDecorationLine: 'underline'
     },
     errorMessage: {
         color: 'red'

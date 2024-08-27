@@ -2,12 +2,15 @@ import { Pressable, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'rea
 import React from 'react'
 import Header from '../components/Header'
 import Categories from '../components/Categories'
+import { colors } from '../theme/colors'
 
 const Home = ({ navigation }) => {
   return (
     <SafeAreaView>
+      <View style={styles.headerView}>
         <Header title='Categories' />
-        <Categories navigation={navigation} />
+      </View>
+      <Categories navigation={navigation} />
     </SafeAreaView>
 
   )
@@ -15,4 +18,10 @@ const Home = ({ navigation }) => {
 
 export default Home
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  headerView: {
+    paddingTop: 40,
+    paddingBottom: 20,
+    backgroundColor: colors.secondary
+  }
+})
